@@ -1,1 +1,36 @@
 
+# src/train_model.py
+import pickle
+from sklearn.svm import SVC
+from sklearn.model_selection import train_test_split
+from preprocess import preprocess_data
+import os
+
+def train_model():
+    # Load preprocessed data
+        # Update with the new dataset path
+    X, y = preprocess_data("D:/ACTech Work/College projects/Strees Detection/Implementation/data/Final_dataset.csv")  
+
+    try:
+        # Split the data into training and testing sets
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+        # Initialize SVM classifier
+        svm_model = SVC(kernel='linear', C=10, random_state=42)
+
+        # Train the SVM model
+        svm_model.fit(X_train, y_train)
+
+        # Save the trained model
+        model_path = 'models/svm_model.pkl'
+        # Create directory if not exists
+        os.makedirs(os.path.dirname(model_path), exist_ok=True)  
+        with open(model_path, 'wb') as model_file:
+            pickle.dump(svm_model, model_file)
+        
+        print("Model saved successfully")
+    except Exception as e:
+        print(f"Error occurred while training and saving the model: {e}")
+
+if __name__ == "__main__":
+    train_model()
